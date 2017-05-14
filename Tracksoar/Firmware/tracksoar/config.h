@@ -44,7 +44,7 @@
 // - Cars:       9
 // - Home:       0
 // - IGate:      5
-#define S_CALLSIGN      "KI6VBK"
+#define S_CALLSIGN      "KD8YZL"
 #define S_CALLSIGN_ID   11
 
 // Destination callsign: APRS (with SSID=0) is usually okay.
@@ -68,7 +68,7 @@
 	#define APRS_COMMENT    "Tracksoar v1.1"
 #endif
 #ifdef TRACKSOAR_12
-	#define APRS_COMMENT    "Tracksoar v1.2"
+	#define APRS_COMMENT    "MMSTC/MS2TC Test"
 #endif
 
 
@@ -228,8 +228,8 @@
 // 3. When flashing the firmware, disconnect the GPS from the RX pin or you
 //    will get errors.
 
- #define DEBUG_GPS    // GPS sentence dump and checksum validation
- #define DEBUG_AX25   // AX.25 frame dump
+//#define DEBUG_GPS    // GPS sentence dump and checksum validation
+//#define DEBUG_AX25   // AX.25 frame dump
 // #define DEBUG_MODEM  // Modem ISR overrun and profiling
 // #define DEBUG_AFSK   // AFSK (modulation) output
 // #define DEBUG_RESET  // AVR reset
