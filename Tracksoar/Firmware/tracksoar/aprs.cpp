@@ -81,8 +81,13 @@ void aprs_send()
   ax25_send_string("/Ti=");
   dtostrf(sensors_temperature(), -1, 2, temp);
   ax25_send_string(temp);
+  // External temperature
+  // "Te=-8.70"
+  ax25_send_string("/Te");
+  dtostrf(sensors_external_temperature(), -1, 2, temp);
+  ax25_send_string(temp);
 
-  // 
+//
 //   ax25_send_string("/Ti=");
 //   snprintf(temp, 6, "%d", sensors_int_lm60());
 //   ax25_send_string(temp);

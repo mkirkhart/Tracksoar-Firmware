@@ -24,6 +24,7 @@
 
 #ifdef TRACKSOAR_12
 	#include "./SparkFunBME280.h"
+  #include "./Thermistor_Buzzer_Shield.h"
  	#pragma message("Version 1.2")
 #else
 	#include "Adafruit_BMP085.h"
@@ -35,6 +36,7 @@ void sensors_setup();
 float sensors_temperature();
 int32_t sensors_pressure();
 float sensors_humidity();
+float sensors_external_temperature(void);
 
 #endif // ifndef __SENSORS_AVR_H__
 #endif // ifdef AVR

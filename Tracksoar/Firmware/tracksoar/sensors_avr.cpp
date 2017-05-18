@@ -23,6 +23,7 @@
 
 #ifdef TRACKSOAR_12
  	BME280 bme280;
+	ThermistorBuzzerShield shield;
 
 	void sensors_setup() {
 		bme280.settings.commInterface = I2C_MODE;
@@ -31,17 +32,27 @@
 		bme280.settings.tStandby = 0;
 		bme280.settings.filter = 0;
 		bme280.settings.tempOverSample = 1;
-	    bme280.settings.pressOverSample = 1;
+		bme280.settings.pressOverSample = 1;
 		bme280.settings.humidOverSample = 1;
 
 	  if (!bme280.begin()) {
 		Serial.println("Could not find a valid BMP085 sensor, check wiring!");
 		while (1) {}
 	  }
+
+		if(!shield.begin())
+		{
+		  Serial.println("Could not find Thermistor Buzzer Shield!"); 
+		  while(1)
+		  {
+		  }
+		}
 	}
 
 	float sensors_temperature() {
-		return bme280.readTempC();
+		// NOTE: APRS expects temperature readings in degrees F, not degrees C
+		float temperature = bme280.readTempF();
+		return temperature;
 	}
 
 	int32_t sensors_pressure() {
@@ -50,6 +61,13 @@
 
 	float sensors_humidity() {
 		return bme280.readFloatHumidity();
+	}
+
+	// for reading the external thermistor connected to the thermistor-buzzer shield
+	float sensors_external_temperature(void)
+	{
+		float thermistorTemperature;
+		return shield.readThermistorTemperatureF(thermistorTemperature);
 	}
 
 #else
