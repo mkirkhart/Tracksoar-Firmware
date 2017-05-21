@@ -27,7 +27,7 @@
 
 	void sensors_setup() {
 		bme280.settings.commInterface = I2C_MODE;
-		bme280.settings.I2CAddress = 0x77;
+		bme280.settings.I2CAddress = 0x76;
 		bme280.settings.runMode = 3; //Normal mode
 		bme280.settings.tStandby = 0;
 		bme280.settings.filter = 0;
@@ -50,9 +50,7 @@
 	}
 
 	float sensors_temperature() {
-		// NOTE: APRS expects temperature readings in degrees F, not degrees C
-		float temperature = bme280.readTempF();
-		return temperature;
+      return bme280.readTempF();
 	}
 
 	int32_t sensors_pressure() {
