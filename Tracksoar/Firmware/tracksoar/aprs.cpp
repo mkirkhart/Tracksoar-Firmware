@@ -29,6 +29,7 @@
 #  include <WProgram.h>
 #endif
 
+
 // Module functions
 float meters_to_feet(float m)
 {
@@ -68,20 +69,29 @@ void aprs_send()
   ax25_send_string("/A=");            // Altitude (feet). Goes anywhere in the comment area
   snprintf(temp, 7, "%06ld", (long)(meters_to_feet(gps_altitude) + 0.5));
   ax25_send_string(temp);
-  // Pressure: "/Pa=12345"
-  ax25_send_string("/Pa=");
-  snprintf(temp, 6, "%ld", sensors_pressure());
-  ax25_send_string(temp);
-  // Humidity: "/Rh=84.56"
-  ax25_send_string("/Rh=");
-  dtostrf(sensors_humidity(), -1, 2, temp);
-  ax25_send_string(temp);
+
+#ifdef _ENABLE_BME280_TEMPERATURE
   // Temperature
   // "Ti=-8.70"
   ax25_send_string("/Ti=");
   dtostrf(sensors_temperature(), -1, 2, temp);
   ax25_send_string(temp);
+#endif  //_ENABLE_BME280_TEMPERATURE
 
+#ifdef _ENABLE_BME280_PRESSURE
+  // Pressure: "/Pa=12345"
+  ax25_send_string("/Pa=");
+  snprintf(temp, 6, "%ld", sensors_pressure());
+  ax25_send_string(temp);
+#endif  //_ENABLE_BME280_PRESSURE
+  
+#ifdef _ENABLE_BME280_HUMIDITY
+  // Humidity: "/Rh=84.56"
+  ax25_send_string("/Rh=");
+  dtostrf(sensors_humidity(), -1, 2, temp);
+  ax25_send_string(temp);
+#endif  //_ENABLE_BME280_HUMIDITY
+  
   // 
 //   ax25_send_string("/Ti=");
 //   snprintf(temp, 6, "%d", sensors_int_lm60());
