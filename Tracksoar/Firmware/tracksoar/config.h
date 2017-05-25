@@ -199,7 +199,7 @@
 #define BUZZER_ALTITUDE         3000.0  // meters (1 ft = 0.3048 m)
 
 // The options here are pin 9 or 10
-#define BUZZER_PIN              9
+#define BUZZER_PIN              10
 
 // --------------------------------------------------------------------------
 // Debug

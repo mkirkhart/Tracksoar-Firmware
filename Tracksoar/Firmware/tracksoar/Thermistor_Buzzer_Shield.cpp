@@ -72,7 +72,7 @@ boolean ThermistorBuzzerShield::readThermistorTemperatureC(float &temperature)
 	{
 		float ThermistorResistance;
 		float NaturalLogOfThermistorResistanceToReferenceResistance;
-		float ThermistorTemperature;
+		float denominator;
 
 		// compute the thermistor resistance
 		ThermistorResistance = (float)(ADC_RESOLUTION) / (float)RawThermistorReading;
@@ -83,12 +83,12 @@ boolean ThermistorBuzzerShield::readThermistorTemperatureC(float &temperature)
 		// compute the thermistor temperature (in Kelvins)
 		NaturalLogOfThermistorResistanceToReferenceResistance = log(ThermistorResistance / ThermistorReferenceResistance);
 
-		temperature = ThermistorA1;
-		temperature += ThermistorB1 * NaturalLogOfThermistorResistanceToReferenceResistance;
-		temperature += ThermistorC1 * NaturalLogOfThermistorResistanceToReferenceResistance * NaturalLogOfThermistorResistanceToReferenceResistance;
-		temperature += ThermistorD1 * NaturalLogOfThermistorResistanceToReferenceResistance * NaturalLogOfThermistorResistanceToReferenceResistance * NaturalLogOfThermistorResistanceToReferenceResistance;
+		denominator = ThermistorA1;
+		denominator += ThermistorB1 * NaturalLogOfThermistorResistanceToReferenceResistance;
+		denominator += ThermistorC1 * NaturalLogOfThermistorResistanceToReferenceResistance * NaturalLogOfThermistorResistanceToReferenceResistance;
+		denominator += ThermistorD1 * NaturalLogOfThermistorResistanceToReferenceResistance * NaturalLogOfThermistorResistanceToReferenceResistance * NaturalLogOfThermistorResistanceToReferenceResistance;
 
-		temperature = 1.0 / ThermistorTemperature;
+		temperature = 1.0 / denominator;
 		// Finally, convert from Kelvins to degrees C
 		temperature -= KelvinsAt0DegreesC;
 	}

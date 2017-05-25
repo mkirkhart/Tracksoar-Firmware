@@ -65,7 +65,8 @@
 	float sensors_external_temperature(void)
 	{
 		float thermistorTemperature;
-		return shield.readThermistorTemperatureF(thermistorTemperature);
+		shield.readThermistorTemperatureF(thermistorTemperature);
+    return thermistorTemperature;   
 	}
 
 #else
