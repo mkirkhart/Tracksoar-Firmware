@@ -8,7 +8,7 @@
 
 #include "Thermistor_Buzzer_Shield.h"
 
-#define ADC_RESOLUTION    4096L
+#define ADC_RESOLUTION    1024L
 
 // calibration coefficients for the Vishay NTCLE100E3103JB0
 static const float ThermistorA1 = 3.354016e-3;
@@ -24,7 +24,11 @@ static const float ThermistorSignalConditioningRS = 1000.0;
 // with a 20K RL and 1K RS, this represents a thermistor resistance of a little more than 2M ohms,
 // or a temperature of about -64.9 degrees C
 static const uint16_t MinimumThermistorReading = 10;
+// with same RL and RS, this represents a thermistor resistance of about 1.069 K ohms,
+// or a temperature of about 85.0 degrees C
+static const uint16_t MaximumThermistorReading = 929;
 static const float DefaultLowThermistorTemperature = -99.0;
+static const float DefaultHighThermistorTemperature = 99.0;
 
 
 /**************************************************************************/
@@ -65,10 +69,14 @@ boolean ThermistorBuzzerShield::readThermistorTemperatureC(float &temperature)
 
 	uint16_t RawThermistorReading;
 
+	// Read thermistor voltage from ADC (12 bit resolution)
 	RawThermistorReading = m_ADC.ReadConversionResults();
+  // Because original limits and such were based on 10 bit resolution, we need to lose the 2 least significant bits
+  RawThermistorReading >>= 2;
 
-	// make sure we do not have a missing thermistor
-	if(RawThermistorReading > MinimumThermistorReading)
+	// range check our ADC reading to make sure it represents a reasonable value; 
+	// make sure we do not have a missing thermistor or a shorted input
+	if((RawThermistorReading > MinimumThermistorReading) && (RawThermistorReading < MaximumThermistorReading))
 	{
 		float ThermistorResistance;
 		float NaturalLogOfThermistorResistanceToReferenceResistance;
@@ -92,6 +100,10 @@ boolean ThermistorBuzzerShield::readThermistorTemperatureC(float &temperature)
 		// Finally, convert from Kelvins to degrees C
 		temperature -= KelvinsAt0DegreesC;
 	}
+  else if(RawThermistorReading >= MaximumThermistorReading)
+  {
+    temperature = DefaultHighThermistorTemperature;
+  }
 	else
 	{
 		temperature = DefaultLowThermistorTemperature;

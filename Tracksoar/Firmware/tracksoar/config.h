@@ -68,7 +68,7 @@
 	#define APRS_COMMENT    "Tracksoar v1.1"
 #endif
 #ifdef TRACKSOAR_12
-	#define APRS_COMMENT    "MMSTC/MS2TC Test"
+	#define APRS_COMMENT    "thermistor-buzzer shield test"
 #endif
 
 

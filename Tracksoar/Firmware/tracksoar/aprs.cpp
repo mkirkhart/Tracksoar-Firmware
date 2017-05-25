@@ -29,6 +29,8 @@
 #  include <WProgram.h>
 #endif
 
+#define _ENABLE_THERMISTOR_BUZZER_SHIELD_TEMPERATURE
+
 
 // Module functions
 float meters_to_feet(float m)
@@ -70,11 +72,13 @@ void aprs_send()
   snprintf(temp, 7, "%06ld", (long)(meters_to_feet(gps_altitude) + 0.5));
   ax25_send_string(temp);
 
+#ifdef _ENABLE_THERMISTOR_BUZZER_SHIELD_TEMPERATURE
   // External temperature
   // "Te=-8.70"
   ax25_send_string("/Te");
   dtostrf(sensors_external_temperature(), -1, 2, temp);
   ax25_send_string(temp);
+#endif  //_ENABLE_THERMISTOR_BUZZER_SHIELD_TEMPERATURE
 
 #ifdef _ENABLE_BME280_TEMPERATURE
   // Temperature
