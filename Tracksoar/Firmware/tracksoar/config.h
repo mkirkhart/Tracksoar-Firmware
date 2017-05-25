@@ -196,7 +196,8 @@
 // This option disables the buzzer above BUZZER_ALTITUDE meters. This is a
 // float value, so make it really high (eg. 1000000.0 = 1 million meters)
 // if you want it to never stop buzzing.
-#define BUZZER_ALTITUDE         3000.0  // meters (1 ft = 0.3048 m)
+// setting buzzer altitude threshold to 600 meters for flight
+#define BUZZER_ALTITUDE         600.0  // meters (1 ft = 0.3048 m)
 
 // The options here are pin 9 or 10
 #define BUZZER_PIN              10
