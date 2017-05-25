@@ -32,6 +32,13 @@
 
 #endif
 
+// enable use of the internal WDT to work around the BME280 lockup problem
+#define _ENABLE_WDT
+
+#ifdef _ENABLE_WDT
+#include <avr/wdt.h>
+#endif  //_ENABLE_WDT
+
 // Trackuino custom libs
 #include "config.h"
 #include "afsk_avr.h"
@@ -65,6 +72,11 @@ static int32_t next_aprs = 0;
 
 void setup()
 {
+#ifdef _ENABLE_WDT
+  // disable the watchdog during startup (hopefully, the bootloader has done this as well)
+  wdt_disable();
+#endif  //_ENABLE_WDT
+  
   pinMode(LED_PIN, OUTPUT);
   pin_write(LED_PIN, LOW);
 
@@ -108,6 +120,11 @@ void setup()
   }  
   // TODO: beep while we get a fix, maybe indicating the number of
   // visible satellites by a series of short beeps?
+
+#ifdef _ENABLE_WDT
+  // turn on the watchdog timer with a timeout of 8 seconds (maximum timeout)
+  wdt_enable(WDTO_8S);
+#endif  //_ENABLE_WDT
 }
 
 void get_pos()
@@ -131,6 +148,11 @@ void get_pos()
 
 void loop()
 {
+#ifdef _ENABLE_WDT
+  // pet the watchdog to keep him happy
+  wdt_reset();
+#endif  //_ENABLE_WDT
+  
   // Time for another APRS frame
   if ((int32_t) (millis() - next_aprs) >= 0) {
     get_pos();
