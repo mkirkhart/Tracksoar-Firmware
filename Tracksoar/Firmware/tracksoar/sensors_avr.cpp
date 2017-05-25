@@ -22,34 +22,41 @@
 #include <Arduino.h>
 
 #ifdef TRACKSOAR_12
- 	BME280 bme280;
+#define BME280_I2C_ADDRESS  0x76
+
+ 	Adafruit_BME280 bme280;
 
 	void sensors_setup() {
-		bme280.settings.commInterface = I2C_MODE;
-		bme280.settings.I2CAddress = 0x76;
-		bme280.settings.runMode = 3; //Normal mode
-		bme280.settings.tStandby = 0;
-		bme280.settings.filter = 0;
-		bme280.settings.tempOverSample = 1;
-	    bme280.settings.pressOverSample = 1;
-		bme280.settings.humidOverSample = 1;
-
-	  if (!bme280.begin()) {
-		Serial.println("Could not find a valid BMP085 sensor, check wiring!");
+    // Note: Adafruit_BME280::begin() will call Adafruit_BME280::setSampling() with reasonable defaults
+	  if (!bme280.begin(BME280_I2C_ADDRESS)) {
+		Serial.println("Could not find a valid BME280 sensor, check wiring!");
 		while (1) {}
 	  }
 	}
 
 	float sensors_temperature() {
-      return bme280.readTempF();
+      float temperature = bme280.readTemperature();
+      // the BME280 reports temperature in degrees C,
+      // but APRS needs it in degrees F,
+      // so we perform the appropriate conversion:
+      // degreesF = (degreesC * 9 / 5) + 32
+      temperature *= 9.0f;
+      temperature /= 5.0f;
+      temperature += 32.0f;
+
+      return temperature;
 	}
 
 	int32_t sensors_pressure() {
-		return (int32_t)bme280.readFloatPressure();
+    int32_t ReturnValue;
+    float pressure;
+    pressure = bme280.readPressure();
+    ReturnValue = (int32_t)(pressure + 0.5f);
+		return ReturnValue;
 	}
 
 	float sensors_humidity() {
-		return bme280.readFloatHumidity();
+		return bme280.readHumidity();
 	}
 
 #else

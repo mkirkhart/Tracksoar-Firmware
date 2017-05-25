@@ -23,7 +23,7 @@
 #include <Wire.h>
 
 #ifdef TRACKSOAR_12
-	#include "./SparkFunBME280.h"
+  #include "./Adafruit_BME280.h"
  	#pragma message("Version 1.2")
 #else
 	#include "Adafruit_BMP085.h"

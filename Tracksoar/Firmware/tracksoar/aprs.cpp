@@ -29,6 +29,10 @@
 #  include <WProgram.h>
 #endif
 
+#define _ENABLE_BME280_TEMPERATURE
+#define _ENABLE_BME280_PRESSURE
+#define _ENABLE_BME280_HUMIDITY
+
 
 // Module functions
 float meters_to_feet(float m)
