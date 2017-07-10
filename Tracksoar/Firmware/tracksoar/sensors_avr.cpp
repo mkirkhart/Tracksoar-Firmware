@@ -35,14 +35,18 @@
 		bme280.settings.pressOverSample = 1;
 		bme280.settings.humidOverSample = 1;
 
+
+     digitalWrite(LED_PIN, HIGH);
 	  if (!bme280.begin()) {
 		Serial.println("Could not find a valid BMP085 sensor, check wiring!");
 		while (1) {}
 	  }
+     digitalWrite(LED_PIN, LOW);
+
 
 		if(!shield.begin())
 		{
-		  Serial.println("Could not find Thermistor Buzzer Shield!"); 
+		  Serial.println("Could not find Thermistor Buzzer Shield!");
 		  while(1)
 		  {
 		  }
