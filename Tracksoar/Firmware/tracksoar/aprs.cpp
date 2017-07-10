@@ -29,8 +29,6 @@
 #  include <WProgram.h>
 #endif
 
-#define _ENABLE_THERMISTOR_BUZZER_SHIELD_TEMPERATURE
-
 
 // Module functions
 float meters_to_feet(float m)

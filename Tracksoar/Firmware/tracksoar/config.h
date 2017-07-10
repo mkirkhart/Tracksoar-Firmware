@@ -236,6 +236,12 @@
 // #define DEBUG_RESET  // AVR reset
 // #define DEBUG_SENS   // Sensors
 
+#define _ENABLE_THERMISTOR_BUZZER_SHIELD_TEMPERATURE
+
+#define _ENABLE_BME280_TEMPERATURE
+#define _ENABLE_BME280_PRESSURE
+#define _ENABLE_BME280_HUMIDITY
+
 
 #endif
 
