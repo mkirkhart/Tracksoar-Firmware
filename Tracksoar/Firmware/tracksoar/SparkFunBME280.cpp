@@ -65,7 +65,6 @@ uint8_t BME280::begin()
 {
 	//Check the settings structure values to determine how to setup the device
 	uint8_t dataToWrite = 0;  //Temporary variable
-
 	switch (settings.commInterface)
 	{
 
@@ -76,6 +75,14 @@ uint8_t BME280::begin()
 	case SPI_MODE:
 		// start the SPI library:
 		SPI.begin();
+		#ifdef ARDUINO_ARCH_ESP32
+		SPI.setFrequency(1000000);
+		// Data is read and written MSb first.
+		SPI.setBitOrder(SPI_MSBFIRST);
+		// Like the standard arduino/teensy comment below, mode0 seems wrong according to standards
+		// but conforms to the timing diagrams when used for the ESP32
+		SPI.setDataMode(SPI_MODE0);
+		#else
 		// Maximum SPI frequency is 10MHz, could divide by 2 here:
 		SPI.setClockDivider(SPI_CLOCK_DIV32);
 		// Data is read and written MSb first.
@@ -85,6 +92,7 @@ uint8_t BME280::begin()
 		// This was SPI_MODE3 for RedBoard, but I had to change to
 		// MODE0 for Teensy 3.1 operation
 		SPI.setDataMode(SPI_MODE3);
+		#endif
 		// initalize the  data ready and chip select pins:
 		pinMode(settings.chipSelectPin, OUTPUT);
 		digitalWrite(settings.chipSelectPin, HIGH);
@@ -179,8 +187,7 @@ float BME280::readFloatPressure( void )
 	var2 = (((int64_t)calibration.dig_P8) * p_acc) >> 19;
 	p_acc = ((p_acc + var1 + var2) >> 8) + (((int64_t)calibration.dig_P7)<<4);
 	
-	p_acc = p_acc >> 8; // /256
-	return (float)p_acc;
+	return (float)p_acc / 256.0;
 	
 }
 
@@ -223,7 +230,7 @@ float BME280::readFloatHumidity( void )
 	var1 = (var1 < 0 ? 0 : var1);
 	var1 = (var1 > 419430400 ? 419430400 : var1);
 
-	return (float)((var1>>12) >> 10);
+	return (float)(var1>>12) / 1024.0;
 
 }
 

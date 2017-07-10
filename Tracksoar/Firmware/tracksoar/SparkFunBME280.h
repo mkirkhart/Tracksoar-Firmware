@@ -24,7 +24,6 @@ Distributed as-is; no warranty is given.
 #define __BME280_H__
 
 #include "stdint.h"
-#include "SPI.h"
 
 #define I2C_MODE 0
 #define SPI_MODE 1
